@@ -1,0 +1,34 @@
+DROP TABLE IF EXISTS PERSON;
+DROP TABLE IF EXISTS LOCATIONS;
+DROP TABLE IF EXISTS LOC_WEATHER;
+DROP TABLE IF EXISTS LOC_TRAILS;
+CREATE TABLE IF NOT EXISTS PERSON (
+    ID SERIAL PRIMARY KEY,
+    FIRST_NAME VARCHAR(255),
+    LAST_NAME VARCHAR(255)
+);
+CREATE TABLE IF NOT EXISTS LOCATIONS(
+    search_query VARCHAR(255),
+    display_name VARCHAR(255),
+    lat VARCHAR(255),
+    lon VARCHAR(255)
+);
+CREATE TABLE IF NOT EXISTS LOC_WEATHER(
+    search_query VARCHAR(255),
+    forecast VARCHAR(255),
+    time VARCHAR(255)
+);
+CREATE TABLE IF NOT  EXISTS LOC_TRAILS(
+    search_query VARCHAR(255),
+    name VARCHAR(255),
+    location VARCHAR(255),
+    length VARCHAR(255),
+    stars VARCHAR(255),
+    T_STAR_VOTES VARCHAR(255),
+    summary VARCHAR(255),
+    trail_url VARCHAR(255),
+    conditions VARCHAR(255),
+    condition_date VARCHAR(255),
+    condition_time VARCHAR(255)
+);
+INSERT INTO person(first_name,last_name) VALUES ('Ahmad','shela');
