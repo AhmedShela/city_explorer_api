@@ -40,6 +40,27 @@ function Trail(dataOfTrails) {
     Trail.all.push(this);
 }
 
+Movie.all =[];
+function Movie(dataOfMovie) {
+    this.title = dataOfMovie.title;
+    this.overview = dataOfMovie.overview;
+    this.average_votes = dataOfMovie.vote_average;
+    this.total_votes = dataOfMovie.vote_count;
+    this.image_url =`https://image.tmdb.org/t/p/w500${dataOfMovie.poster_path}`; //((dataOfMovie.poster_path) ? dataOfMovie.poster_path : '');//if(!dataOfMovie.poster_path){''};
+    this.popularity = dataOfMovie.popularity;
+    this.released_on = dataOfMovie.release_date;
+    Movie.all.push(this);
+}
+// Yelp.all = [];
+function Yelp(dataOfYelp) {
+    this.name = dataOfYelp.name;
+    this.image_url = dataOfYelp.image_url;
+    this.price = dataOfYelp.price;
+    this.rating = dataOfYelp.rating;
+    this.url = dataOfYelp.url;
+    this.created_at = Date.now();
+}
+
 app.get('/', (req, res) => {
     res.status(200).send('YOUR DOING GREATE!!')
 });
@@ -106,6 +127,40 @@ app.get('/trails', (req, res) => {
         res.status(200).send(Trail.all)
         
     })
+});
+
+
+app.get('/yelp',(request,response)=>{
+    const city = request.query.search_query;
+    const url = `https://api.yelp.com/v3/businesses/search?latitude=${Location.all[0].latitude}&longitude=${Location.all[0].longitude}`
+      const API_KEY = process.env.YELP_API_KEY;
+      return superagent
+        .get(url)
+        .set({ "Authorization": `Bearer ${API_KEY}`})
+        .then(result => {
+            const allYelps = result.body.businesses.map(data => {
+              return new Yelp(data);
+            });
+            response.send(allYelps);
+        })
+        .catch(error => console.log(error));
+})
+
+
+
+
+app.get('/movies',(req,res) =>{
+    let city = req.query.search_query;
+    Movie.all =[];
+    const movieKey = process.env.MOVIE_API_KEY;
+    let url = `https://api.themoviedb.org/3/search/movie?api_key=${movieKey}&query=${city}&language=en-US`
+    superagent.get(url)
+    .then(movieData =>{
+         movieData.body.results.forEach(element => {
+        new Movie(element);
+        });
+        res.status(200).send(Movie.all)
+    });
 });
 
 
